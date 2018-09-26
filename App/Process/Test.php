@@ -19,7 +19,7 @@ class Test extends AbstractProcess
     {
         // TODO: Implement run() method.
         $this->addTick(30000, function() {
-            echo 'this is '.$this->getProcessName().' process tick';
+            echo 'this is '.$this->getProcessName().' process tick'.PHP_EOL;
         });
     }
 
@@ -31,6 +31,6 @@ class Test extends AbstractProcess
     public function onReceive(string $str)
     {
         // TODO: Implement onReceive() method.
-        echo 'process rec '.$str;
+        echo 'process rec '.$str.PHP_EOL;
     }
 }
