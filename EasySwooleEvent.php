@@ -9,14 +9,17 @@
 namespace EasySwoole\Frame;
 
 
+use App\Process\Test;
 use App\Utility\Pools\MysqlPool;
 use App\Utility\Pools\RedisPool;
 use EasySwoole\Component\Di;
 use EasySwoole\Core\EventRegister;
+use EasySwoole\Core\Process\ProcessManager;
 use EasySwoole\Core\Time\Timer;
 use EasySwoole\Frame\AbstractInterface\Event;
 use EasySwoole\Http\Request;
 use EasySwoole\Http\Response;
+use EasySwoole\Trigger\Logger;
 
 class EasySwooleEvent implements Event
 {
@@ -46,12 +49,18 @@ class EasySwooleEvent implements Event
 //                    }
 //                });
                 // 定时任务
-                Timer::loop(1 * 1000, function () use(&$timer) {
+                Timer::loop(1 * 1000, function () {
                     $time = date('H:i:s');
                     if ($time === '17:26:00') {
                         echo '17:00'.PHP_EOL;
                     }
                 });
+
+                // 启动定时器
+//                Timer::loop(10000, function() {
+//                    Logger::getInstance()->console('timer run');  # 写日志到控制台
+//                    ProcessManager::getInstance()->writeByProcessName('test', time());  # 向自定义进程发消息
+//                });
             }
         });
         // webSocket绑定监听事件
@@ -66,6 +75,10 @@ class EasySwooleEvent implements Event
 //        $register->add('close', function($ser, $fd) {
 //            echo "client {$fd} closed\n";
 //        });
+
+        // 创建自定义进程
+        ProcessManager::getInstance()->addProcess('test', Test::class);
+
         // 注入redis池和mysql池
         Di::getInstance()->set('REDISPOOL', new RedisPool);
         Di::getInstance()->set('MYSQLPOOL', new MysqlPool);
