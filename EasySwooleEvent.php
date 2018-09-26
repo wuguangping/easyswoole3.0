@@ -10,6 +10,7 @@ namespace EasySwoole\Frame;
 
 
 use App\Process\Inotify;
+use App\Process\Subscribe;
 use App\Process\Test;
 use App\Utility\Pools\MysqlPool;
 use App\Utility\Pools\RedisPool;
@@ -82,6 +83,9 @@ class EasySwooleEvent implements Event
 
         // 开启热重启进程
         ProcessManager::getInstance()->addProcess('autoReload', Inotify::class);
+
+        // 开启redis订阅进程
+        ProcessManager::getInstance()->addProcess('sub', Subscribe::class);
 
         // 注入redis池和mysql池
         Di::getInstance()->set('REDISPOOL', new RedisPool);
